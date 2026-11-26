@@ -6,8 +6,8 @@ export class BaseAuthModal {
     this.modal = page.locator('#auth-modal');
     this.closeButton = this.modal.getByText('×');
 
-    this.loginTab = this.modal.locator('button, .tab').filter({ hasText: /^Login$/ }).first();
-    this.registerTab = this.modal.locator('button, .tab').filter({ hasText: /^Register$/ }).first();
+    this.loginTab = this.modal.locator('.auth-tab').filter({ hasText: /^Login$/ });
+    this.registerTab = this.modal.locator('.auth-tab').filter({ hasText: /^Register$/ });
   }
 
   async verifyModalVisible() {

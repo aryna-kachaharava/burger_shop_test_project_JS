@@ -1,20 +1,15 @@
 import { expect } from '@playwright/test';
-import { Cart} from './components/cart.component.js';
-import { RegisterModal } from './components/register.component.js';
-import { LoginModal } from './components/login.component.js';
-import { AboutUsPage } from './pages/aboutUs.page.js';
-import { BurgerShopPage } from './pages/burgerShop.page.js';
-import { ContactsPage } from './pages/contacts.page.js';
-import { AboutUsPage } from './pages/aboutUs.page.js';
+import { Cart } from './cart.component.js';
+import { RegisterModal } from './register.component.js';
+import { LoginModal } from './login.component.js';
 
-
-export class Header{
-    constructor(page){
+export class Header {
+    constructor(page) {
         this.page = page;
 
         this.headerContainer = page.locator('.main-header');
 
-        this.logo = this.headerContainer.getByRole('link',{name:'Burger Shop'});
+        this.logo = this.headerContainer.getByRole('link', { name: 'Burger Shop' });
         this.homeLink = this.headerContainer.getByRole('link', { name: 'Home' });
         this.contactsLink = this.headerContainer.getByRole('link', { name: 'Contacts' });
         this.aboutUsLink = this.headerContainer.getByRole('link', { name: 'About Us' });
@@ -23,32 +18,32 @@ export class Header{
         this.loginButton = this.headerContainer.getByRole('button', { name: 'Login' });
         this.registerButton = this.headerContainer.getByRole('button', { name: 'Register' });
 
+        this.userInfoContainer = page.locator('#user-info');
+        this.userDisplayName = page.locator('#user-display-name');
+        this.logoutButton = page.locator('#logout-btn');
+
         this.cartIcon = page.locator('#cart-icon');
         this.cartCounter = page.locator('#cart-count');
     }
+
     async clickLogo() {
         await this.logo.click();
-        return new BurgerShopPage(this.page);
     }
 
     async goToHome() {
         await this.homeLink.click();
-        return new BurgerShopPage(this.page);
     }
 
     async goToContacts() {
         await this.contactsLink.click();
-        return new ContactsPage(this.page);
     }
 
     async goToAboutUs() {
         await this.aboutUsLink.click();
-        return new AboutUsPage(this.page);
     }
 
     async goToMenuPlanner() {
         await this.menuPlannerLink.click();
-        return new MenuPlannerPage(this.page);
     }
 
     async openLoginModal() {
@@ -61,9 +56,16 @@ export class Header{
         return new RegisterModal(this.page);
     }
 
-   async openCart() {
+    async openCart() {
+    const cart = new Cart(this.page);
+    if (!(await cart.overlay.isVisible())) {
         await this.cartIcon.click();
-        return new Cart(this.page);
+    }
+    return cart;
+    }
+
+    async logout() {
+        await this.logoutButton.click();
     }
 
     async verifyCartCount(expectedCount) {

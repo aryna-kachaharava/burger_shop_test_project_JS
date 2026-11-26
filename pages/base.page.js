@@ -11,7 +11,7 @@ export class BasePage {
   }
 
   async open(path = '/index.php') {
-    await this.page.goto(path);
+  await this.page.goto(path, { waitUntil: 'domcontentloaded' });
   }
 
   async verifyUrl(expectedUrlPart) {

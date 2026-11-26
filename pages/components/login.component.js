@@ -5,9 +5,10 @@ export class LoginModal extends BaseAuthModal {
   constructor(page) {
     super(page);
 
-    this.emailInput = this.modal.getByLabel('Email');
-    this.passwordInput = this.modal.getByLabel('Password');
-    this.submitLoginButton = this.modal.getByRole('button', { name: 'Login' }).last();
+    this.loginForm = this.modal.locator('#login-form');
+    this.emailInput = this.loginForm.locator('#login-email');
+    this.passwordInput = this.loginForm.locator('#login-password');
+    this.submitLoginButton = this.loginForm.locator('#login-submit, button:has-text("Login")').first();
     this.registerHereLink = this.modal.getByText(/Register here/i);
   }
 
@@ -24,7 +25,7 @@ export class LoginModal extends BaseAuthModal {
   }
 
   async switchToRegisterTab() {
-    await this.loginTab.click();
-    return new RegisterModal(this.page);
+  await this.registerTab.click();
+  return new RegisterModal(this.page);
   }
 }

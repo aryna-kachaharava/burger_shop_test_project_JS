@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { BasePage } from './pages/base.page.js';
+import { BasePage } from './base.page.js';
 
 export class ContactsPage extends BasePage {
   constructor(page) {
@@ -17,13 +17,14 @@ export class ContactsPage extends BasePage {
     this.specialHoursHeading = page.getByRole('heading', { name: 'Special Hours' });
 
     this.contactFormSection = page.locator('section').filter({ hasText: 'Send Us a Message' });
-    this.nameInput = this.contactFormSection.getByPlaceholder('Your Name');
-    this.emailInput = this.contactFormSection.getByPlaceholder('Your Email');
-    this.subjectInput = this.contactFormSection.getByPlaceholder('Subject');
-    this.messageInput = this.contactFormSection.getByPlaceholder('Your Message');
-    this.sendMessageButton = this.contactFormSection.getByRole('button', { name: 'Send Message' });
 
-    this.mailingListInput = page.getByPlaceholder('Your Email Address');
+    this.nameInput = page.getByPlaceholder('Your Name', { exact: true });
+    this.emailInput = page.getByPlaceholder('Your Email', { exact: true });
+    this.subjectInput = page.getByPlaceholder('Subject', { exact: true });
+    this.messageInput = page.getByPlaceholder('Your Message', { exact: true });
+    this.sendMessageButton = page.getByRole('button', { name: 'Send Message' });
+    this.mailingListInput = page.getByPlaceholder('Your Email Address', { exact: true });
+
     this.subscribeButton = page.getByRole('button', { name: 'Subscribe' });
 
     this.cateringHeading = page.getByRole('heading', { name: 'Catering Services' });

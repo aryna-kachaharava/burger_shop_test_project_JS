@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
-import { BasePage } from './pages/base.page.js';
+import { BasePage } from './base.page.js';
 
-export class PlannerPage extends BasePage {
+export class MenuPlannerPage extends BasePage {
   constructor(page) {
     super(page);
 
@@ -24,9 +24,8 @@ export class PlannerPage extends BasePage {
     this.calculateWeeklyCaloriesButton = this.weeklyPlannerSection.getByRole('button', { name: 'Calculate Weekly Calories' });
     this.clearPlannerButton = this.weeklyPlannerSection.getByRole('button', { name: 'Clear Planner' });
     this.addRandomMealsButton = this.weeklyPlannerSection.getByRole('button', { name: 'Add Random Meals (Demo)' });
-    this.totalWeeklyCaloriesText = this.weeklyPlannerSection.locator('p, div').filter({ hasText: 'Total Weekly Calories:' }).first();
-    this.averageDailyCaloriesText = this.weeklyPlannerSection.locator('p, div').filter({ hasText: 'Average Daily Calories:' }).first();
-
+    this.totalWeeklyCaloriesText = this.weeklyPlannerSection.getByText(/Total Weekly Calories:/);
+    this.averageDailyCaloriesText = this.weeklyPlannerSection.getByText(/Average Daily Calories:/);
     this.mealSelectionSection = this.plannerContainer.locator('.meal-selection');
   }
 
@@ -57,11 +56,9 @@ export class PlannerPage extends BasePage {
   }
 
   async addMealToPlanner(mealName) {
-    const mealCard = this.mealSelectionSection
-      .locator('.card, div')
-      .filter({ has: this.page.getByRole('heading', { name: mealName, exact: true }) })
-      .first();
-    await mealCard.getByRole('button', { name: 'Add to Planner' }).click();
+  const heading = this.mealSelectionSection.getByRole('heading', { name: mealName, exact: true });
+  const mealCard = heading.locator('xpath=ancestor::*[.//button[normalize-space()="Add to Planner"]][1]');
+  await mealCard.getByRole('button', { name: 'Add to Planner' }).click();
   }
 
   async addRandomMeals() {
@@ -73,6 +70,9 @@ export class PlannerPage extends BasePage {
   }
 
   async clearPlanner() {
-    await this.clearPlannerButton.click();
-  }
+  this.page.once('dialog', async (dialog) => {
+    await dialog.accept();
+  });
+  await this.clearPlannerButton.click();
+}
 }

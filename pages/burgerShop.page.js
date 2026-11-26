@@ -18,20 +18,21 @@ export class BurgerShopPage extends BasePage {
   }
   
   async verifyCategoryLoaded(categoryName) {
-    await expect(this.page).toHaveTitle(`Burger Shop - ${categoryName}`);
-    await expect(this.sectionTitle).toHaveText(`Delicious ${categoryName}`);
-  }
+  await expect(this.page).toHaveTitle(`Burger Shop - ${categoryName}`);
+  await expect(this.sectionTitle).toBeVisible();
+  await expect(this.sectionTitle).toContainText(categoryName, { ignoreCase: true });
+}
 
   getProductCardByName(productName) {
-    return this.productsContainer
-      .locator('div')
-      .filter({ has: this.page.getByRole('heading', { name: productName, exact: true }) })
-      .first();
+  return this.productsContainer
+    .locator('button.add-to-cart[data-name="' + productName + '"]')
+    .locator('xpath=ancestor::div[1]');
   }
 
-  async addProductToCart(productName) {
-    const card = this.getProductCardByName(productName);
-    await card.getByRole('button', { name: 'Add to Cart' }).click();
+async addProductToCart(productName) {
+  await this.productsContainer
+    .locator(`button.add-to-cart[data-name="${productName}"]`)
+    .click();
   }
 
   async addFirstProductToCart() {

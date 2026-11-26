@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { OrderModal } from './checkout.component.js';
 
 export class Cart {
   constructor(page) {
@@ -44,8 +45,11 @@ export class Cart {
 
 
   async clickClearCart() {
-    await this.clearCartButton.click();
-  }
+  this.page.once('dialog', async (dialog) => {
+    await dialog.accept();
+  });
+  await this.clearCartButton.click();
+}
 
   async clickAddToPlanner() {
     await this.addToPlannerButton.click();
@@ -53,5 +57,6 @@ export class Cart {
 
   async clickCheckout() {
     await this.checkoutButton.click();
+    return new OrderModal(this.page);
   }
 }

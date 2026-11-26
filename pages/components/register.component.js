@@ -5,11 +5,12 @@ export class RegisterModal extends BaseAuthModal {
   constructor(page) {
     super(page);
 
-    this.fullNameInput = this.modal.getByLabel('Full Name');
-    this.emailInput = this.modal.getByLabel('Email');
-    this.passwordInput = this.modal.getByLabel('Password');
-    this.submitRegisterButton = this.modal.getByRole('button', { name: 'Register' }).last();
-    this.loginHereLink = this.modal.getByText('Login here');
+    this.registerForm = this.modal.locator('#register-form');
+    this.fullNameInput = this.registerForm.locator('#register-name');
+    this.emailInput = this.registerForm.locator('#register-email');
+    this.passwordInput = this.registerForm.locator('#register-password');
+    this.submitRegisterButton = this.registerForm.locator('#register-submit');
+    this.loginHereLink = this.modal.getByText(/Login here/i);
   }
 
   async fillForm(fullName, email, password) {
